@@ -1,76 +1,94 @@
 #include <stdio.h>
 #include <stdlib.h>
-void plus ( double a[][3] , double b[][3],double c[][3]);
-void zhuanzhi ( double a[][3]);
-void multiply ( double a[][3], double b[][3],double c[][3]);
-void ni ( double a[][3] );
+void add( double a[], double b[], double c[],int m, int n);
+void print(double a[], int m , int n);
+void multiply(double a[], int am ,int an , double b[], int bm ,int bn,double c[] ,int *cm,int *cn);
 int main()
-{
-    double a[3][3]={{1,2,3},{1,2,3},{1,2,3}};
-    double b[3][3]= {{1,2,3},{1,2,3},{1,2,3}};
-    double c[3][3]={0};
-    int i , j;
-    multiply(a,b,c);
-    for ( i = 0 ; i < 3 ;i++)
+{   int am ,an,bm,bn;
+    printf("请输入矩阵规模\n");
+    scanf("%d%d",&am,&an);
+    double a[am*an];
+    int i,k;
+    for ( i = 0 ; i<am ; i++)
     {
-        for ( j = 0 ; j<3 ; j++ )
+        for ( k=0 ; k<an ;k++)
         {
-            printf("\t%lf",c[i][j]);
+            printf("请输入%d行%d列的元素\n",i+1,k+1);
+            scanf("%lf",&a[i*an+k]);
         }
-        printf("\n");
     }
+    printf("请输入矩阵规模\n");
+    scanf("%d%d",&bm,&bn);
+    double b [bm*bn];
+    for ( i = 0 ; i<bm ; i++)
+    {
+        for ( k=0 ; k<bn ;k++)
+        {
+            printf("请输入%d行%d列的元素\n",i+1,k+1);
+            scanf("%lf",&b[i*bn+k]);
+        }
+    }
+  //  print(b,q,p);
+    printf("\n");
+    double c[100000] = {0} ;
+    int cm, cn;
+    multiply(a,am,an,b,bm,bn,c,&cm,&cn);
+    print(c,cm,cn);
 
 
     return 0;
 }
-void plus ( double a[][3] , double b[][3],double c[][3])
+void add( double a[],double b[],double c[],int m ,int n)
 {
-    int i,j;
-    for ( j =0 ; j<3 ; j++ )
-    {
-        for ( i = 0 ; i<3 ; i++)
-            c[j][i] = a[j][i] + b[j][i];
-    }
 
-}
-void zhuanzhi(double a[][3])
-{
-    int i,j;
-    for ( i = 0 ; i < 3 ; i++ )
-    {
-         for ( j = 0 ; j < i+1 ; j++)
-         {
-             int t;
-            t = a[i][j];
-            a[i][j] = a[j][i];
-            a[j][i] = t;
-         }
-    }
+      //int   i =  sizeof(a)/sizeof(a[0]) - 1;
+      for ( int i = 0 ; i < m ;i++)
+      {
+          for ( int j = 0 ; j<n ; j++)
+            c[i*n+j] = a[i*n+j] + b[i*n+j];
+      }
 }
 
-void multiply ( double a[][3], double b[][3],double c[][3])
+void print(double a[],int m ,int n)
 {
+    if ( m==0 || n==0 )
+        printf("\n");
+    else
+   {
     int i,j;
-    for ( i = 0 ; i < 3 ; i++)
+    for ( i = 0; i < m ; i++ )
     {
-        for ( j = 0 ; j < 3 ; j++)
+        for ( j=0 ; j<n; j++)
         {
-            for (  int k =0 ; k < 3 ;k++)
-                c[i][j] = c[i][j] + a[i][k] * b[k][j];
-
+            printf("\t%lf",a[i*n+j]);
         }
+        printf("\n");
     }
+   }
 }
 
-/*void ni ( double a[][3] )
+void multiply(double a[], int am ,int an , double b[], int bm ,int bn,double c[] ,int *cm,int *cn)
 {
-    double b[3][3];
-    int i,j;
-    for ( i=0 ; i<3 ; i++ )
-        for ( j = 0 ; j < 3 ; j++)
+    if ( an != bm)
     {
-        for (  int n =0 ; n < 3 ; n++)
-
+        *cm=0;
+        *cn=0;
+        printf("不能计算");
     }
+    else
+
+       {
+        int i ,j;
+        for ( i = 0 ; i<am ; i++ )
+        {
+            for ( j = 0 ; j < bn ; j++)
+            {
+                for ( int k =0 ; k < an ; k++)
+                    c[i*bn+j] = c[i*bn+j]+a[i*an+k]*b[k*bn+j];
+            }
+        }
+
+        *cm = am;
+        *cn = bn;
+       }
 }
-*/
